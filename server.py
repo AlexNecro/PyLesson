@@ -3,10 +3,8 @@ import time
 
 app = Flask(__name__)
 
-messages = [
-    {"username": "Nick", "text": "Hello", "time": time.time()}
-]
-
+users = []
+messages = []
 
 @app.route("/")
 def hello():
@@ -15,7 +13,9 @@ def hello():
 
 @app.route("/status")
 def status():
-    return {"status": True, "name": "Сервер Алексея", "time": time.ctime()}
+    msgsQty = len(messages)
+    usersQty = len(users);
+    return {"status": True, "name": "Сервер Алексея", "time": time.ctime(), "users": usersQty, "messages": msgsQty}
 
 
 @app.route("/send", methods=["POST"])
@@ -23,7 +23,10 @@ def send():
     username = request.json["username"]
     text = request.json["text"]
     curtime = time.time()
-    messages.append({"username": username, "text": curtime, "time": time.time()})
+
+    if users.count(username) == 0:
+        users.append(username)
+    messages.append({"username": username, "text": text, "time": curtime})
     print(request.json)
     return {"ok": True}
 
