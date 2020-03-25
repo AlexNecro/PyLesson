@@ -6,6 +6,7 @@ app = Flask(__name__)
 users = []
 messages = []
 
+
 @app.route("/")
 def hello():
     return "Hello"
